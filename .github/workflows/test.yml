@@ -35,6 +35,6 @@ jobs:
       - name: Mypy
         run: poetry run mypy .
       - name: Pylint
-        run: poetry run pylint
+        run: poetry run pylint .
       - name: Pytest
-        run: poetry run pytest --cov
+        run: poetry run pytest --cov --cov-fail-under=90
