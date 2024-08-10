@@ -201,6 +201,10 @@ pytest -s --runperf  tests/eventlib_tests/test_performance.py
 
 ## Contributing
 
+Contributions are welcome.
+
+Please follow the commit convention https://www.conventionalcommits.org/en/v1.0.0/.
+
 ## License
 
 Dual-licensed under the terms of either the [Apache License 2.0](LICENSE-APACHE) or the [MIT license](LICENSE-MIT).
