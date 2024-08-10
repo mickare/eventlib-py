@@ -1,0 +1,114 @@
+# Copyright 2024 Michael Käser
+# SPDX-License-Identifier: (Apache-2.0 OR MIT)
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "eventlib-py"
+version = "0.1.0"
+description = "A Python event framework to decouple code using events."
+authors = ["Michael Käser <info@mickare.de>"]
+license = "(Apache-2.0 OR MIT)"
+readme = "README.md"
+packages = [
+    { include = "eventlib" },
+    { include = "tests", format = "sdist" },
+    { include = "examples", format = "sdist" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Framework :: AsyncIO",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+pytest-asyncio = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pylint = "^3.2"
+mypy = "^1.11"
+black = "^24.4"
+isort = "^5.13"
+
+[tool.poetry.group.benchmark.dependencies]
+numpy = "^2.0.1"
+matplotlib = "^3.9.1"
+pandas = "^2.2.2"
+pandas-stubs = "*"
+tqdm = "^4.66.5"
+types-tqdm = "*"
+tabulate = "^0.9"
+
+# ==================================================================================================
+# Mypy
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+exclude = ["^\\.?venv"]
+
+# ==================================================================================================
+# Pylint
+[tool.pylint.master]
+recursive = true
+output-format = "colorized"
+ignore = [
+    "venv",
+    ".venv",
+    ".run",
+    ".vscode",
+    ".idea",
+    ".mypy_cache",
+    ".pytest_cache",
+    "build",
+]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.basic]
+class-rgx = "[A-Z_][a-zA-Z0-9]*$"
+
+# ==================================================================================================
+# Black
+[tool.black]
+line-length = 120
+target-version = ['py311']
+
+# ==================================================================================================
+# Isort
+[tool.isort]
+py_version = "311"
+line_length = 120
+profile = "black"
+src_paths = [".", "tests"]
+
+# ==================================================================================================
+# Pytest
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+
+[tool.coverage.run]
+omit = ["tests/*", "examples/*", "benchmark/*", "venv/*", ".venv/*"]
+
+# ==================================================================================================
+# Semantic Release
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:tool.poetry.version"]
+major_on_zero = false
+upload_to_vcs_release = true
+changelog_file = "CHANGELOG.md"
+build_command = "poetry build"

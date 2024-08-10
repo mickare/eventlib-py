@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+build/
+*.egg-info/
+*.egg
+
+# Translations
+*.mo
+*.pot
+
+# Environments
+venv/
+.venv/
+
+# Tools
+.mypy_cache/
+.pytest_cache/
+.coverage
+
+# IDEs
+.idea
+.vcode
+
+# OS
+.DS_Store
+
+# Benchmark files
+*.json
