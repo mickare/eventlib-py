@@ -46,6 +46,8 @@ nice -20 python -O -m benchmark range --file results.json
 - `--file` is the file to write the results to.
 - The results will be shown as matplotlib plot.
 
+![Ranged Run](./2024_benchmark_range_py311.png)
+
 ### Render a previous ranged run
 
 ```bash
