@@ -10,7 +10,7 @@ env:
 
 jobs:
   call-test:
-    uses: ./github/workflows/test.yml
+    uses: ./.github/workflows/test.yml
   release:
     runs-on: ubuntu-latest
     concurrency: release
