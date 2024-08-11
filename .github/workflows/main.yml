@@ -9,8 +9,12 @@ env:
   python_version: 3.11
 
 jobs:
+  call-test:
+    uses: ./github/workflows/test.yml
   release:
     runs-on: ubuntu-latest
+    concurrency: release
+    needs: [call-test]
     outputs:
       released: ${{ steps.release.outputs.released }}
       version: ${{ steps.release.outputs.version }}
