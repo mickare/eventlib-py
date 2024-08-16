@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## v0.2.0 (2024-08-16)
+
+### Documentation
+
+* docs: add commit convention link (#1)
+
+* docs: add commit convention link
+
+* fix(cicd): fix pylint command and fail coverage if under 90 percent ([`1fa3737`](https://github.com/mickare/eventlib-py/commit/1fa3737b565c6507a49c44493cffb0f210624a40))
+
+### Feature
+
+* feat(cicd): add test in release workflow ([`4a3e39b`](https://github.com/mickare/eventlib-py/commit/4a3e39bbb55db7be18dfc87f6db7f2ff0448da36))
+
+### Fix
+
+* fix(cicd): fix release pipeline (with temporary workaround) ([`dfb6f10`](https://github.com/mickare/eventlib-py/commit/dfb6f1051750fc8192c4fcd03477ec1ad0f5672a))
+
+* fix(cicd): fix release pipeline ([`06cba0b`](https://github.com/mickare/eventlib-py/commit/06cba0bac86cd20a68db0ee7ab081e7e148b774e))
+
+* fix(cicd): fix release pipeline ([`de825ce`](https://github.com/mickare/eventlib-py/commit/de825ce4a2a4a21b140b9c5fc45a4037e421dfbb))
+
+* fix(cicd): fix release workflow ([`7ca5afa`](https://github.com/mickare/eventlib-py/commit/7ca5afa5d0680396be07291d14bffeb26a6018b4))
+
+* fix(cicd): fix release workflow ([`96c14ad`](https://github.com/mickare/eventlib-py/commit/96c14ad9525b351c0025c67652a8052263de7fda))
+
+### Unknown
+
+* fix/cicd: add semantic release bot (#5)
+
+* fix(cicd): fix release workflow
+
+* fix(cicd): add github app for semantic release ([`55fc8d7`](https://github.com/mickare/eventlib-py/commit/55fc8d727bf9643f1b9c7ddacdc8c69d65c1cec3))
+
 ## v0.1.0 (2024-08-10)
 
 ### Documentation
