@@ -14,6 +14,7 @@ Feature overview:
 - **Asynchronous** - Full support for asynchronous event handlers and context managers.
 - **Priority Ordering** - Control the order in which event handlers are called.
 - **Monitoring** - Use context managers to monitor event processing.
+- **Compatible** - Works with almost anything, use: [dataclasses](https://docs.python.org/3/library/dataclasses.html), [Pydantic](examples/support_pydantic.py) or [attrs](examples/support_attrs.py).
 
 ```python
 import asyncio
