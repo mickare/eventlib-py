@@ -2,8 +2,8 @@
 <!-- SPDX-License-Identifier: (Apache-2.0 OR MIT) -->
 # Eventlib-py
 [![Release](https://github.com/mickare/eventlib-py/actions/workflows/release.yml/badge.svg)](https://github.com/mickare/eventlib-py/actions/workflows/release.yml)
-![PyPI - Version](https://img.shields.io/pypi/v/eventlib-py?label=pypi%20package&color=%2334D058%2C%2328A745)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/eventlib-py)
+[![PyPI - Version](https://img.shields.io/pypi/v/eventlib-py?label=pypi%20package&color=%2334D058%2C%2328A745)](https://pypi.org/project/eventlib-py/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/eventlib-py)](https://pypi.org/project/eventlib-py/)
 
 Eventlib-py is a small & simple event framework for Python that can be used to decouple your code.
 
