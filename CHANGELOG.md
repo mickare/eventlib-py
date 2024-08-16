@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.2.1 (2024-08-16)
+
+### Fix
+
+* fix(cicd): add pypi release ([`690c0c2`](https://github.com/mickare/eventlib-py/commit/690c0c2e3850c3fea1ffcbd2432d89582326c27b))
+
 ## v0.2.0 (2024-08-16)
 
 ### Documentation
