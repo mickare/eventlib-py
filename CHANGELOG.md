@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## v1.0.0 (2024-08-16)
+
+### Breaking
+
+* feat: release first version
+
+BREAKING CHANGE: Release version 1.0.0 ([`91f11cd`](https://github.com/mickare/eventlib-py/commit/91f11cdfb313433db06b56f5064f506b9147a56e))
+
+### Documentation
+
+* docs(README): remove performance test section ([`1ead54f`](https://github.com/mickare/eventlib-py/commit/1ead54fb8ee32e9afa889e93e9d36936dcd2b2a1))
+
+* docs(README): update introduction ([`f696060`](https://github.com/mickare/eventlib-py/commit/f6960601c17222b80baf8264a1c3cd17ba9d91eb))
+
+* docs(README): add badge icons ([`10dd679`](https://github.com/mickare/eventlib-py/commit/10dd67901da81eb5fc525da65e1aad7c7005eed5))
+
+### Feature
+
+* feat(examples): add pydantic and attrs examples ([`4e39e6e`](https://github.com/mickare/eventlib-py/commit/4e39e6e3d8fb38af0e0a1a724ebf5b8ae26d5e3f))
+
 ## v0.2.1 (2024-08-16)
 
 ### Fix
