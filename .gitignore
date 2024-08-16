@@ -5,6 +5,7 @@ __pycache__/
 build/
 *.egg-info/
 *.egg
+dist/
 
 # Translations
 *.mo
