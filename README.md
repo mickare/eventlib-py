@@ -6,11 +6,11 @@
 ![PyPI - License](https://img.shields.io/pypi/l/eventlib-py)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/eventlib-py)
 
-Eventlib-py is a simple event framework for Python that can be used to decouple your code.
+Eventlib-py is a small & simple event framework for Python that can be used to decouple your code.
 
 Feature overview:
 
-- **Fast** - JIT-compiled event chains for fast event emission.
+- **Fast** - Pre-computed event chains for fast event emission.
 - **Lightweight** - No extra dependencies.
 - **Asynchronous** - Full support for asynchronous event handlers and context managers.
 - **Priority Ordering** - Control the order in which event handlers are called.
