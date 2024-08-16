@@ -30,6 +30,7 @@ jobs:
         with:
           token: ${{ steps.bot_token.outputs.token }}
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Install poetry & python-semantic-release
         run: pipx install poetry~=1.8.3 python-semantic-release~=9.8.6
