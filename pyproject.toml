@@ -38,7 +38,7 @@ pytest-cov = "*"
 pytest-mock = "*"
 pylint = "^3.2"
 mypy = "^1.11"
-black = "^24.4"
+black = ">=24.4,<27.0"
 isort = "^5.13"
 
 [tool.poetry.group.benchmark.dependencies]
