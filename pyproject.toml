@@ -113,6 +113,5 @@ build_command = "poetry build"
 upload_to_vcs_release = true
 dist_glob_patterns = ["dist/*"]
 
-[tool.semantic_release.changelog.default_templates]
+[tool.semantic_release.changelog]
 changelog_file = "CHANGELOG.md"
-output_format = "md"
