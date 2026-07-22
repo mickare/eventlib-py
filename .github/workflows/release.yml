@@ -8,12 +8,17 @@ on:
 env:
   python_version: 3.12
 
+permissions:
+  contents: read
+
 jobs:
   release-test:
     uses: ./.github/workflows/test.yml
   release:
     runs-on: ubuntu-latest
-    concurrency: release
+    concurrency:
+      group: release
+      cancel-in-progress: false
     needs: [ release-test ]
     permissions:
       id-token: write
