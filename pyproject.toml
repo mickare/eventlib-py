@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "eventlib-py"
-version = "1.1.1"
+version = "1.1.2"
 description = "A Python event framework to decouple code using events."
 authors = ["Michael Käser <info@mickare.de>"]
 license = "(Apache-2.0 OR MIT)"
