@@ -31,14 +31,14 @@ classifiers = [
 python = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3"
+pytest = "^9.1"
 pytest-asyncio = "*"
 pytest-cov = "*"
 pytest-mock = "*"
-pylint = "^3.2"
+pylint = "^4.0.6"
 mypy = "^1.11"
-black = "^26.3"
-isort = "^5.13"
+black = "^26.5.1"
+isort = "^8.0.1"
 
 [tool.poetry.group.benchmark.dependencies]
 numpy = "^2.0.1"

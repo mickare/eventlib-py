@@ -9,6 +9,7 @@ See more: https://pypi.org/project/pydantic/
 Requirements:
   - pydantic
 """
+
 from datetime import datetime
 from typing import Annotated, Iterator, Literal
 
@@ -57,6 +58,7 @@ EXAMPLE_EVENTS: list[dict] = [
     {"type": "deleted", "timestamp": "2024-08-16T20:02:00", "name": "event_1"},
 ]
 AnyEvent = Annotated[CreatedItemEvent | DeletedItemEvent, Field(discriminator="type")]
+# pylint: disable=invalid-name
 AnyEventAdapter: TypeAdapter[AnyEvent] = TypeAdapter(AnyEvent)
 
 

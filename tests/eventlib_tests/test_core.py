@@ -182,7 +182,7 @@ def test_usage_annotation_too_many_args(system):
         pass
 
     with pytest.raises(TypeError):
-        system.subscribe()(handle)  # type:ignore
+        system.subscribe()(handle)  # type: ignore
 
 
 @pytest.mark.asyncio

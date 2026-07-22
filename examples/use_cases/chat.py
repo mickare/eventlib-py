@@ -5,6 +5,7 @@
 Example of a simple chat system with event handlers.
 It demonstrates how to use event handlers to cancel messages, print messages, and handle errors.
 """
+
 import contextlib
 import dataclasses
 import sys

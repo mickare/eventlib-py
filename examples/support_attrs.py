@@ -9,6 +9,7 @@ See more: https://pypi.org/project/attrs/
 Requirements:
   - attrs
 """
+
 from datetime import datetime
 from typing import Iterator, Literal
 
