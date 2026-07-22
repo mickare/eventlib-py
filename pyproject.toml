@@ -110,8 +110,18 @@ branch = "main"
 version_toml = ["pyproject.toml:tool.poetry.version"]
 major_on_zero = true
 build_command = "poetry build"
-upload_to_vcs_release = true
-dist_glob_patterns = ["dist/*"]
+commit_parser = "conventional"
 
-[tool.semantic_release.changelog]
+[tool.semantic_release.branches.main]
+match = "(main|master)"
+prerelease_token = "rc"
+prerelease = false
+
+[tool.semantic_release.changelog.default_templates]
 changelog_file = "CHANGELOG.md"
+output_format = "md"
+mask_initial_release = true
+
+[tool.semantic_release.publish]
+dist_glob_patterns = ["dist/*"]
+upload_to_vcs_release = true

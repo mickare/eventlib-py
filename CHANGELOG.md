@@ -1,5 +1,15 @@
 # CHANGELOG
 
+<!-- version list -->
+
+## v1.1.3 (2026-07-23)
+
+### Bug Fixes
+
+- **cicd**: Changelog automatic update
+  ([`ad181d7`](https://github.com/mickare/eventlib-py/commit/ad181d7abd5f19aa80520cebb19d38b212a48855))
+
+
 ## v1.0.0 (2024-08-16)
 
 ### Breaking
