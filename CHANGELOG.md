@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v1.2.0 (2026-07-22)
+
+### Chores
+
+- **changelog**: Repair changelog with new template by semantic-release
+  ([`100ee1c`](https://github.com/mickare/eventlib-py/commit/100ee1c426af3caa7f683d6870b6bc8c96b2aadd))
+
+### Features
+
+- **benchmark**: Update bench dependencies
+  ([`7e613ae`](https://github.com/mickare/eventlib-py/commit/7e613aeb94f8054c313b85b75dffd15a633b21a9))
+
+
 ## v1.1.3 (2026-07-23)
 
 ### Bug Fixes
