@@ -15,6 +15,7 @@ The reference implementation is the following::
                 await async_func(event)
 
 """
+
 import argparse
 import asyncio
 import dataclasses
@@ -98,13 +99,11 @@ class BenchmarkResult:
         time_ref_per_it = format_si_unit(self.time_ref / self.iterations, "s")
         time_lib_per_it = format_si_unit(self.time_lib / self.iterations, "s")
         time_lib_init_fmt = format_si_unit(self.time_lib_init, "s")
-        return textwrap.dedent(
-            f"""Benchmark result for {self.iterations} iterations:
+        return textwrap.dedent(f"""Benchmark result for {self.iterations} iterations:
             - Reference time: {self.time_ref:>5.3f}s (~{time_ref_per_it:>5})
             - Library time:   {self.time_lib:>5.3f}s (~{time_lib_per_it:>5}) x{self.overhead_factor:.2f}
             - Library init:   {time_lib_init_fmt:>5}
-            """
-        )
+            """)
 
 
 def benchmark(case: BenchmarkCase, iterations: int) -> BenchmarkResult:

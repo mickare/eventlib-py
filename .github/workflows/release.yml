@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  python_version: 3.11
+  python_version: 3.12
 
 jobs:
   release-test:
@@ -22,23 +22,23 @@ jobs:
       version: ${{ steps.release.outputs.version }}
       tag: ${{ steps.release.outputs.tag }}
     steps:
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v3
         id: bot_token
         with:
           app-id: ${{ vars.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ steps.bot_token.outputs.token }}
           persist-credentials: false
           fetch-depth: 0
 
       - name: Install poetry & python-semantic-release
-        run: pipx install poetry~=1.8.3 python-semantic-release~=9.8.6
+        run: pipx install poetry~=2.3.2 python-semantic-release~=10.6.1
 
       - name: Set up Python ${{ env.python_version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ env.python_version }}
           cache: "poetry"

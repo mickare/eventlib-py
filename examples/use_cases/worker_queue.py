@@ -5,7 +5,6 @@
 Example of using an `asyncio.Queue` and workers to schedule and emit events.
 """
 
-
 import asyncio
 import dataclasses
 

@@ -24,6 +24,7 @@ from typing import (
     Self,
     TypeGuard,
     TypeVar,
+    cast,
 )
 
 from eventlib.type_utils import (
@@ -278,7 +279,7 @@ class EventChain(Generic[E]):
 
     def call(self, event: E):
         """Call all event subscriptions synchronously."""
-        with _NO_EXIT_STACK if self.no_context else ExitStack() as stack:  # type: ignore
+        with cast(ExitStack, _NO_EXIT_STACK) if self.no_context else ExitStack() as stack:
             subs = self.subs
             exceptions: list[Exception] = []
             try:
@@ -298,7 +299,7 @@ class EventChain(Generic[E]):
 
     async def call_async(self, event: E):
         """Call all event subscriptions asynchronously."""
-        async with _NO_EXIT_STACK if self.no_context else AsyncExitStack() as stack:  # type: ignore
+        async with cast(AsyncExitStack, _NO_EXIT_STACK) if self.no_context else AsyncExitStack() as stack:
             subs = self.subs
             exceptions: list[Exception] = []
             try:
