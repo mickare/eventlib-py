@@ -40,24 +40,13 @@ mypy = "^1.11"
 black = "^26.5.1"
 isort = "^8.0.1"
 
-[tool.poetry.group.benchmark.dependencies]
-numpy = "^2.5"
-matplotlib = "^3.11"
-pandas = "^3.0"
-pandas-stubs = "*"
-tqdm = "^4.66"
-types-tqdm = "*"
-tabulate = "^0.9"
-attrs = "^24.2"
-pydantic = "^2.8"
-
 # ==================================================================================================
 # Mypy
 [tool.mypy]
 python_version = "3.12"
 warn_return_any = true
 warn_unused_configs = true
-exclude = ["^\\.?venv"]
+exclude = ["^\\.?venv", "^benchmark/"]
 
 # ==================================================================================================
 # Pylint
@@ -73,6 +62,7 @@ ignore = [
     ".mypy_cache",
     ".pytest_cache",
     "build",
+    "benchmark",
 ]
 
 [tool.pylint.format]
@@ -86,6 +76,7 @@ class-rgx = "[A-Z_][a-zA-Z0-9]*$"
 [tool.black]
 line-length = 120
 target-version = ['py312']
+extend-exclude = "^(.*/)?benchmark/"
 
 # ==================================================================================================
 # Isort
@@ -94,6 +85,7 @@ py_version = "312"
 line_length = 120
 profile = "black"
 src_paths = [".", "tests"]
+skip_glob = ["benchmark/*"]
 
 # ==================================================================================================
 # Pytest

@@ -7,6 +7,7 @@ on:
 
 env:
   python_version: 3.12
+  poetry_version: "2.5.1"
 
 permissions:
   contents: read
@@ -40,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install poetry & python-semantic-release
-        run: pipx install poetry~=2.3.2 python-semantic-release~=10.6.1
+        run: pipx install poetry~=${{ env.poetry_version }} python-semantic-release~=10.6.1
 
       - name: Set up Python ${{ env.python_version }}
         uses: actions/setup-python@v7

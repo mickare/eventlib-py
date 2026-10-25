@@ -155,6 +155,7 @@ asyncio.run(MyEvent().emit_async())  # Prints: "Event received", "async_on_event
 ## Benchmarks
 
 The [benchmark](benchmark/README.md) directory contains code to measure the performance of the eventlib-py library and compare it with a hard-coded reference implementation in Python.
+It is a standalone poetry project with its own [pyproject.toml](./benchmark/pyproject.toml), which keeps its heavy dependencies (pandas, matplotlib, ...) out of the library's environment.
 
 ### Benchmark `case_all`
 
@@ -195,6 +196,13 @@ Run the tests with coverage:
 
 ```bash
 pytest --cov
+```
+
+The benchmark is a separate project and is installed on its own:
+
+```bash
+cd benchmark
+poetry install
 ```
 
 ## Contributing

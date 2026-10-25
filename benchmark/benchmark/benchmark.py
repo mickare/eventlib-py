@@ -26,11 +26,11 @@ from typing import Callable, Protocol
 
 import pandas
 import tqdm
+from eventlib import Event, EventSystem
 from matplotlib import pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 from benchmark.cases import case_all
-from eventlib import Event, EventSystem
 
 
 class BenchmarkCase(Protocol):
@@ -176,7 +176,7 @@ def benchmark_render(frame: pandas.DataFrame):
 
     ax1.set_ylabel("Overhead")
     ax1.set_xscale("log", base=2)
-    ax1.set_ylim(0.95, 1.3)
+    # ax1.set_ylim(0.95, 1.5)
     ax1.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
 
     # Normalize to microseconds

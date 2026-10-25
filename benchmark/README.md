@@ -6,21 +6,25 @@ This benchmark compares the performance of the eventlib-py library with a refere
 
 ## Usage
 
-In the root directory of this repo run the following commands:
+The benchmark is a standalone poetry project in this directory (see [pyproject.toml](./pyproject.toml)).
+Install it and its dependencies (including eventlib-py itself from the repository root) with:
 
 ```bash
-poetry install --with=dev --with=benchmark
-poetry shell
-python -m benchmark --help
+cd benchmark
+poetry run benchmark --help
 ```
 
-- Use Python's `-O` flag to disable assertions and run the benchmark with optimized code.
+Alternatively use `poetry -C benchmark run benchmark ...` from the repository root.
+The console script is equivalent to `python -m benchmark`.
+
+- Use Python's `-O` flag to disable assertions and run the benchmark with optimized code,
+  e.g. `poetry run python -O -m benchmark run ...` instead of `benchmark run ...`.
 - Use `nice -20` to give the benchmark process a higher priority.
 
 ### Single run
 
 ```bash
-nice -20 python -O -m benchmark run -r 100 -i 10_000
+nice -20 benchmark run -r 100 -i 10_000
 ```
 - `-r` is the number of repetitions.
 - `-i` is the number of iterations per repetition.
@@ -41,7 +45,7 @@ Run the benchmark for a range of iterations (from `1` to `2**{iterations-power}`
 It will write the results to a json file and show the rendering.
 
 ```bash
-nice -20 python -O -m benchmark range --file results.json
+nice -20 benchmark range --file results.json
 ```
 - `--file` is the file to write the results to.
 - The results will be shown as matplotlib plot.
@@ -51,7 +55,7 @@ nice -20 python -O -m benchmark range --file results.json
 ### Render a previous ranged run
 
 ```bash
-python -O -m benchmark render --file results.json
+benchmark render --file results.json
 ```
 - `--file` is the file to read the results from.
 - The results will be shown as matplotlib plot.
