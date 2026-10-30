@@ -1,9 +1,11 @@
-# Copyright 2024 Michael Käser
+# Copyright 2026 Michael Käser
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-"""Benchmark main"""
+"""Entry point of the benchmark suite (``python -m benchmark``)."""
 
-from .benchmark import benchmark_cli
+import sys
+
+from .cli import main
 
 if __name__ == "__main__":
-    benchmark_cli()
+    sys.exit(main())

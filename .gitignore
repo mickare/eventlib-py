@@ -27,5 +27,5 @@ venv/
 # OS
 .DS_Store
 
-# Benchmark files
-*.json
+# Benchmark output directory (summaries and figures).
+benchmark/results/*

@@ -17,10 +17,9 @@ import asyncio
 import contextlib
 import sys
 
-from line_profiler import LineProfiler
-
 from eventlib import Event, EventSystem
 from eventlib.core import EventChain, EventSub
+from line_profiler import LineProfiler
 
 # pylint: disable=too-few-public-methods,protected-access
 

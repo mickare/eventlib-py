@@ -3,42 +3,55 @@
 [tool.poetry]
 name = "eventlib-py-benchmark"
 version = "0.0.0"
-description = "Benchmarks for the eventlib-py library."
+description = "Benchmarks and profiling tools for the eventlib-py library."
 authors = ["Michael Käser <info@mickare.de>"]
 license = "(Apache-2.0 OR MIT)"
 readme = "README.md"
 packages = [{ include = "benchmark" }]
 
 [tool.poetry.scripts]
-benchmark = "benchmark.benchmark:benchmark_cli"
+benchmark = "benchmark.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
 eventlib-py = { path = "..", develop = true }
-numpy = "^2.5"
+# pyperf is the harness itself, not an optional extra: `run` needs it.
+pyperf = "^2.10.0"
+# Rendering only; the measurement path never imports matplotlib.
 matplotlib = "^3.11"
-pandas = "^3.0"
-tqdm = "^4.66"
-tabulate = "^0.9"
+# Event declarations used by the `journey` cases.
 attrs = "^24.2"
 pydantic = "^2.8"
 
 [tool.poetry.group.dev.dependencies]
-pandas-stubs = "*"
-types-tqdm = "*"
+pytest = "^9.1"
 pylint = "^4.1.3"
 mypy = "^2.4"
 black = "^26.10.1"
 isort = "^9.0.2"
 
 [tool.poetry.group.profiler.dependencies]
-pyperf = "^2.10.0"
+# Sampling / tracing profilers. pyperf lives in the main group because it is the harness.
 pyinstrument = "^5.1.3"
 line-profiler = "^5.1.0"
-pytest-benchmark = "^5.3.0"
 py-spy = "^0.4.2"
 memray = "^1.20.0"
 viztracer = "^1.1.1"
+pandas = "^3.0"
+pandas-stubs = "*"
+types-tqdm = "*"
+tqdm = "^4.66"
+tabulate = "^0.9"
+
+# ==================================================================================================
+# Pytest
+[tool.pytest.ini_options]
+# Without this section the repository-root pyproject.toml wins rootdir detection, which puts the
+# repository root on sys.path. `benchmark/` is then importable as a namespace package and shadows
+# this project's own `benchmark` package.
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = ["--import-mode=importlib"]
 
 # ==================================================================================================
 # Mypy

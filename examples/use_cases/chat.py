@@ -74,7 +74,17 @@ def chat_example():
     ChatEvent(name="Alice", message="Hello World").emit()
     ChatEvent(name="Bob", message="fail this message").emit()
     ChatEvent(name="Alice", message="cancel this message").emit()
-    while message := input("Enter a message: "):
+    while True:
+        try:
+            message = input("Enter a message: ")
+        except (EOFError, KeyboardInterrupt):
+            # EOF (e.g. stdin redirected from /dev/null, piped input or a closed terminal)
+            # and Ctrl+C both mean "stop chatting"; exiting cleanly keeps the example usable
+            # in non-interactive contexts such as smoke tests and CI.
+            print()
+            return
+        if not message or message.startswith("exit"):
+            return
         ChatEvent(name="You", message=message).emit()
 
 

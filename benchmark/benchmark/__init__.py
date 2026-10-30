@@ -1,4 +1,4 @@
-# Copyright 2024 Michael Käser
+# Copyright 2026 Michael Käser
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 """

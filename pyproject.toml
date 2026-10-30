@@ -91,6 +91,9 @@ skip_glob = ["benchmark/*"]
 # Pytest
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
+# The benchmark is a separate poetry project with its own dependencies and its own
+# `benchmark` package; run its tests with `poetry -C benchmark run pytest`.
+testpaths = ["tests"]
 
 [tool.coverage.run]
 omit = ["tests/*", "examples/*", "benchmark/*", "venv/*", ".venv/*"]

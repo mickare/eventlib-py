@@ -1,61 +1,273 @@
-<!-- Copyright 2024 Michael Käser -->
+<!-- Copyright 2026 Michael Käser -->
 <!-- SPDX-License-Identifier: (Apache-2.0 OR MIT) -->
-# Eventlib-py Benchmark
+# eventlib-py benchmark suite
 
-This benchmark compares the performance of the eventlib-py library with a reference implementation hard-coded in Python.
+A [pyperf](https://github.com/psf/pyperf) benchmark suite for `eventlib-py`.
 
-## Usage
+Every case measures the **same work twice**: once as hand-written Python (`reference`) and
+once through the event system (`library`). The result is the factor the framework adds, and
+the suite's overall score is the **median of those per-case factors**.
 
-The benchmark is a standalone poetry project in this directory (see [pyproject.toml](./pyproject.toml)).
-Install it and its dependencies (including eventlib-py itself from the repository root) with:
+- `1.00x` — the library costs exactly as much as the hand-written reference.
+- `1.50x` — the library costs 50 % more.
+- Lower is better.
+
+---
+
+## Quick start
+
+The benchmark is a standalone poetry project in this directory (see
+[pyproject.toml](./pyproject.toml)). Install it and its dependencies — including
+`eventlib-py` itself from the repository root — with:
 
 ```bash
 cd benchmark
-poetry run benchmark --help
+poetry install
+poetry run benchmark list
 ```
 
-Alternatively use `poetry -C benchmark run benchmark ...` from the repository root.
-The console script is equivalent to `python -m benchmark`.
-
-- Use Python's `-O` flag to disable assertions and run the benchmark with optimized code,
-  e.g. `poetry run python -O -m benchmark run ...` instead of `benchmark run ...`.
-- Use `nice -20` to give the benchmark process a higher priority.
-
-### Single run
+From the repository root, use `poetry -C benchmark run benchmark …`.
 
 ```bash
-nice -20 benchmark run -r 100 -i 10_000
+# Everything, with a report and a summary file
+poetry run benchmark run --summary results/latest.json
+
+# A quick smoke run
+poetry run benchmark run --fast --quiet
+
+# One group
+poetry run benchmark run --select micro
+
+# Draw the graphs from a previous run
+poetry run benchmark render --summary results/latest.json --output results/latest.png
 ```
-- `-r` is the number of repetitions.
-- `-i` is the number of iterations per repetition.
-- The results will be printed to the console.
+
+---
+
+## Commands
+
+| Command | Purpose |
+|:--------|:--------|
+| `benchmark list` | Show every case, grouped, marking the diagnostic ones. |
+| `benchmark run` | Measure the selected cases, print a Markdown report, write a summary. |
+| `benchmark render` | Draw the comparison and overhead graphs (window, or `-o FILE`). |
+
+Anything the suite does not recognise is forwarded to pyperf, so `--fast`, `--rigorous`,
+`-p/--processes`, `-n/--values`, `-w/--warmups`, `--affinity`, `--quiet` and the rest work
+unchanged. `benchmark` with no arguments prints both help pages.
+
+`run` defaults to **40 worker processes** per benchmark instead of pyperf's 20. Dispatch
+benchmarks run in the nanosecond range, where process-to-process jitter is large relative
+to the mean; 20 runs routinely trip pyperf's "not enough samples" warning. Pass
+`-p/--processes` to override, or use `--fast` / `--rigorous`, which keep their own presets.
+
+---
+
+## What is measured
+
+Cases are grouped by the question they answer.
+
+### `macro` — end-to-end dispatch
+
+One emit with every supported handler kind subscribed: two async context managers, two
+sync context managers, two sync handlers and one async handler. This is the successor of the
+original benchmark and the closest thing to a headline number.
+
+### `micro` — one dimension at a time
+
+Handlers are no-ops, so a measured difference is attributable to the framework.
+
+| Case | Dimension |
+|:-----|:----------|
+| `emit_sync_1 / _10 / _100` | Sync dispatch, handler-count scaling |
+| `emit_async_sync_1 / _10` | Async dispatch of *sync* handlers (coroutine bridging) |
+| `emit_async_async_1 / _10` | Async dispatch of async handlers |
+| `emit_sync_context` | Sync dispatch with a context manager (`ExitStack`) |
+| `emit_async_context` | Async dispatch with an async context manager (`AsyncExitStack`) |
+| `inherited_dispatch` | Event inheriting from two event classes (chain merge) |
+| `subscribe_1 / _10 / _100` | Subscription setup cost and its scaling |
+| `emit_zero_sub` | Cached but empty chain — the framework floor *(diagnostic)* |
+| `emit_zero_sub_cold` | Empty chain rebuilt on every emit *(diagnostic)* |
+
+The two diagnostic cases have no fair hand-written twin, so they are measured and reported
+but **excluded from the score**.
+
+### `journey` — what users actually build
+
+Reproduced from [`examples/`](../examples), these measure realistic scenarios rather than
+isolated primitives:
+
+| Case | Scenario |
+|:-----|:---------|
+| `chat_cancel` | Priority-ordered handlers with cancellation (`use_cases/chat.py`) |
+| `plugin_lifecycle` | Lifecycle events observed through a parent event class (`use_cases/plugin_system.py`) |
+| `worker_queue_sync` | Drain a batch of queued events with sync handlers (`use_cases/worker_queue.py`) |
+| `worker_queue_async` | Same, with async handlers |
+| `isolated_systems` | Two systems that must not see each other (`isolated_systems.py`) |
+| `attrs_event` | Event declared with `attrs` (`support_attrs.py`) |
+| `pydantic_event` | Validated Pydantic event (`support_pydantic.py`) |
+| `diamond_inheritance` | Diamond-inherited event reaching each handler once (`complex_inheritance.py`) |
+| `copied_system` | Copy a system and extend the copy (`copied_systems.py`) *(diagnostic)* |
+
+---
+
+## Reading the results
+
+`run` prints a Markdown report and writes the same data as JSON:
 
 ```markdown
-Results for benchmark 'benchmark.cases.case_all' and 10000 iterations:
-|      |   Reference |   Library |   Library Init |   Factor |
-|:-----|------------:|----------:|---------------:|---------:|
-| 0.50 |    42.289μs |  45.373μs |      135.125μs |     1.07 |
-| 0.90 |    43.560μs |  46.809μs |      143.000μs |     1.10 |
-| 0.99 |    46.658μs |  50.048μs |      260.393μs |     1.15 |
+**Overall score (median of per-case ratios): 3.51x**
+
+## micro
+
+| Case | Reference | Library | Ratio | ±1σ | Scored | Description |
+|:-----|----------:|--------:|------:|----:|:-------|:------------|
+| `emit_sync_1` | 93.3 ns ± 4.1 ns | 294 ns ± 18 ns | 3.15x | ±0.21 | yes | Sync emit with 1 no-op handler |
 ```
 
-### Ranged run
+The summary file contains the medians, their spreads, the ratios and the metadata of the
+machine, which is what `render` consumes:
 
-Run the benchmark for a range of iterations (from `1` to `2**{iterations-power}`, default: `2**18`).
-It will write the results to a json file and show the rendering.
+```json
+{
+  "format": 1,
+  "score": 3.51,
+  "metadata": { "python_version": "3.14.7", "hostname": "sol", "cpu_model_name": "…" },
+  "cases": [
+    { "id": "micro.emit_sync_1", "group": "micro", "scored": true,
+      "reference": 9.33e-08, "library": 2.94e-07,
+      "reference_stdev": 4.1e-09, "library_stdev": 1.8e-08,
+      "ratio": 3.15 }
+  ]
+}
+```
+
+### Why the median?
+
+pyperf reports outliers: scheduler noise, GC pauses, CPU frequency changes. The mean is
+sensitive to them, the median is not. The suite therefore uses the median of each measured
+series *and* the median of the per-case ratios, so one noisy case cannot move the headline
+number.
+
+Robustness is not precision, though: the median tells you nothing about how much the
+number would move on a rerun. That is what the `±1σ` column is for.
+
+### Uncertainty
+
+Every ratio carries a one-sigma spread, propagated from both sides:
+
+```
+ratio_stdev = ratio * hypot(rel_stdev(reference), rel_stdev(library))
+rel_stdev(side) = stdev(side) / median(side)
+```
+
+`stdev` is taken over **per-run means**, not pooled values. Values inside one process share
+interpreter state, CPU frequency and cache warmth, so they are correlated; pooling them
+(`Benchmark.stdev()`) understates the between-process variance that actually drives
+run-to-run reproducibility.
+
+`±1σ` is a spread, not pyperf's warning criterion. pyperf asks for 95 % certainty that the
+*mean* varies by less than 1 %, with a 2× safety factor. Our interval answers a narrower
+question and will look tighter. They are not contradictory.
+
+**The score has no confidence interval.** The cases are a curated set, not a random sample,
+so a CI for the score would be meaningless.
+
+### Graphs
+
+`benchmark render` draws two panels from a summary, sharing one case axis:
+
+1. **Cost per case** — reference vs. library, log scale (the cases span several orders of
+   magnitude).
+2. **Overhead factor** — library / reference per case, ordered worst first, with a dashed
+   line at `1.0` (parity), a solid line at the overall score, and `±1σ` error bars.
+   Diagnostic cases are drawn faded and labelled in the legend.
+
+![Rendered benchmark](./benchmark_overview_py314.png)
+
+---
+
+## Comparing runs
 
 ```bash
-nice -20 benchmark range --file results.json
+poetry run benchmark run --summary results/baseline.json
+# … change something …
+poetry run benchmark run --summary results/after.json
 ```
-- `--file` is the file to write the results to.
-- The results will be shown as matplotlib plot.
 
-![Ranged Run](./2026_benchmark_range_py312.png)
+Each run prints its own per-case table and overall score, so the two reports can be read
+off directly. For a statistical before/after test, keep pyperf's native output and use
+`pyperf compare_to` (see below).
 
-### Render a previous ranged run
+When comparing runs:
+
+- Compare **ratios**, not absolute times. A slower machine cancels out; absolute timings
+  do not.
+- Prefer runs made back-to-back on the same machine and interpreter.
+- Treat sub-5 % differences as noise unless the `±1σ` intervals are clearly separated.
+
+### pyperf interoperability
+
+The suite writes its own summary, but every benchmark it runs is a normal pyperf benchmark.
+If you want pyperf's native output (for `pyperf compare_to`, `pyperf stats`, `pyperf hist`),
+just ask pyperf for it — unknown options are forwarded:
 
 ```bash
-benchmark render --file results.json
+# Record a baseline, then a candidate, as pyperf-native files
+poetry run benchmark run --select micro -o results/micro-baseline.json
+# … change something …
+poetry run benchmark run --select micro -o results/micro.json
+
+# Compare them with pyperf's own tooling
+poetry run python -m pyperf compare_to results/micro-baseline.json results/micro.json --table
 ```
-- `--file` is the file to read the results from.
-- The results will be shown as matplotlib plot.
+
+When `-o/--output` is used, the suite does **not** also write its derived summary — you get
+exactly the file you asked for. Use `--summary FILE` if you want both.
+
+---
+
+## Tips
+
+- **Use `-O`** to disable assertions, matching production. The library's `assert_not_*`
+  checks are active under `__debug__`:
+  `poetry run python -O -m benchmark run --summary results/o.json`.
+  The suite forwards the interpreter's optimisation flags to its worker processes.
+- **Use `nice -n -20`** to give the benchmark a higher priority on a busy machine.
+- **Use `--quiet`** to hide pyperf's per-benchmark progress when scripting. Do not use it
+  to hide the "not enough samples" warning: that warning is real, and the `±1σ` column is
+  the suite's own answer to it. If the spread is too wide for your purpose, raise
+  `-p/--processes`.
+- **Don't compare across machines or interpreters** — compare ratios, and prefer runs made
+  back-to-back on the same machine.
+- **Async cases use pyperf's `bench_async_func`**, which enters the event loop once per
+  calibrated batch. The reported value is per operation, not per loop entry.
+
+---
+
+## Profiling
+
+The suite tells you *how much*. For *where*, see
+[`benchmark/profiling/README.md`](./benchmark/profiling/README.md) — `line_profiler`,
+`pyinstrument`, `py-spy` and `memray` scenarios, plus an analysis workflow.
+
+---
+
+## Layout
+
+```
+benchmark/
+├── benchmark/
+│   ├── case.py            Case model (reference + library factories, metadata)
+│   ├── cases/
+│   │   ├── registry.py    Groups, lookup, --select resolution
+│   │   ├── macro.py       End-to-end mixed dispatch
+│   │   ├── micro.py       Single-dimension dispatch measurements
+│   │   └── journey.py     Realistic user scenarios from examples/
+│   ├── suite.py           pyperf orchestration, median scoring, summary I/O, report
+│   ├── render.py          Matplotlib graphs
+│   ├── cli.py             list / run / render
+│   └── profiling/         line_profiler scenarios + profiler workflow docs
+├── tests/                 Tests for the registry, scoring and summary round-trip
+└── results/               Summaries and figures (git-ignored)
+```
